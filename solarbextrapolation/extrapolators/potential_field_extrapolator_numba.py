@@ -59,7 +59,7 @@ def inner_loop(shape, Dx, Dy, x, y, z, boundary, z_submerge):
 
             # Find the components for this contribution product
             B_n = boundary[j_prime, i_prime]
-            G_n = Gn_5_2_29(x, y, z, xP, yP, DxDy, z_submerge)
+            G_n = Gn_5_2_29(x, y, z, xP, yP, z_submerge)
 
             # Add the contributions
             point_phi_sum += B_n * G_n * DxDy
@@ -68,7 +68,7 @@ def inner_loop(shape, Dx, Dy, x, y, z, boundary, z_submerge):
 
 
 @jit(nopython=True)
-def Gn_5_2_29(x, y, z, xP, yP, DxDy_val, z_submerge):
+def Gn_5_2_29(x, y, z, xP, yP, z_submerge):
     """
     Discrete Greens Function
     Extends _Gn_5_2_26 by taking the starting position of each magnetic

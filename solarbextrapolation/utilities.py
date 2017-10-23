@@ -149,8 +149,8 @@ def si_this_map(map):
     meta['cdelt2'] = str(cdelt2.value)
     meta['cunit1'] = str(cdelt1.unit)
     meta['cunit2'] = str(cdelt2.unit)
-    meta['crpix1'] = str(crpix1.value)
-    meta['crpix2'] = str(crpix2.value)
+    #meta['crpix1'] = str(crpix1.value)
+    #meta['crpix2'] = str(crpix2.value)
     #meta['CRVAL1'] = 0.000000 # Reference data coordinates
     #meta['CRVAL2'] = 0.000000
 

@@ -79,22 +79,14 @@ class Extrapolators(object):
         self.meta = { 'boundary_1_meta': self.map_boundary_data.meta }
         self.meta['extrapolator_notes'] = kwargs.get('notes', '')
 
-        # Normalise the units to SI May possible be added here
-
-        # Crop the boundary data if required.
-        self.xrange = kwargs.get('xrange', self.map_boundary_data.xrange)
-        self.yrange = kwargs.get('yrange', self.map_boundary_data.yrange)
-        self.map_boundary_data = self.map_boundary_data.submap(self.xrange, self.yrange)
-        self.xobsrange = self.map_boundary_data.xrange
-        self.yobsrange = self.map_boundary_data.yrange
-
-        #print '\n\nHelp for u:'
-        #print 'help(u): ' + str(help(u))
-        #print '\n\n'
+        self.xrange = self.map_boundary_data.xrange.to(map_magnetogram.meta['cunit1'])
+        self.yrange = self.map_boundary_data.yrange.to(map_magnetogram.meta['cunit2'])
+        self.xobsrange = self.map_boundary_data.xrange.to(map_magnetogram.meta['cunit1'])
+        self.yobsrange = self.map_boundary_data.yrange.to(map_magnetogram.meta['cunit2'])
         self.zrange = kwargs.get('zrange', u.Quantity([0.0, 1.0] * u.Mm) )
         self.shape = np.asarray([self.map_boundary_data.data.shape[1],
-                      self.map_boundary_data.data.shape[0],
-                      long(kwargs.get('zshape', 1L))])
+                                 self.map_boundary_data.data.shape[0],
+                                 long(kwargs.get('zshape', 1L))])
         self.filepath = kwargs.get('filepath', None)
         self.routine = kwargs.get('extrapolator_routine', type(self))
 
