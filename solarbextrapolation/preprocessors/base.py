@@ -7,7 +7,6 @@ Created on Mon Sep 28 19:18:58 2015
 
 # General Imports
 import matplotlib as mpl
-mpl.use('TkAgg') # Force mpl backend not to use qt. Else we have a conflict.
 import numpy as np
 import pickle
 import time

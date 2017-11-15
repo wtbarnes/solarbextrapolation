@@ -73,7 +73,7 @@ class PotentialExtrapolator(Extrapolators):
             determine_vec = self._determine_vec
 
         npmVecSpace = np.zeros(list(phi.shape)+[3]) # in Order XYZC (C = component directions)
-        Bxyz = determine_vec(phi, 1, npmVecSpace)
+        Bxyz = self._determine_vec(phi, 1, npmVecSpace)
 
         return Map3D(Bxyz, self.meta, xrange=self.xrange, yrange=self.yrange, zrange=self.zrange)
 
@@ -106,15 +106,22 @@ class PotentialExtrapolator(Extrapolators):
         Create an empty 3D matrix from the output.
         ATM, for simplicity, I make the same size as the potential field, though the outer 2 layers are all 0.0.
         """
-        tupVolShape = npmVecSpace.shape
+        #tupVolShape = npmVecSpace.shape
 
         # For each cell we use data from 2 in each direction, this means we need to reduce the volume by 2 in eaach direction.
-        for k in range(2, tupVolShape[2]-2):          # Z - Only done first so I can say when an XY slice has been rendered.
-            for j in range(2, tupVolShape[1]-2):      # Y
-                for i in range(2, tupVolShape[0]-2):  # X
-                    npmVecSpace[i,j,k,0]=-(phi[i-2,j,k]-8.0*phi[i-1,j,k]+8.0*phi[i+1,j,k]-phi[i+2,j,k])/(12.0*D)
-                    npmVecSpace[i,j,k,1]=-(phi[i,j-2,k]-8.0*phi[i,j-1,k]+8.0*phi[i,j+1,k]-phi[i,j+2,k])/(12.0*D)
-                    npmVecSpace[i,j,k,2]=-(phi[i,j,k-2]-8.0*phi[i,j,k-1]+8.0*phi[i,j,k+1]-phi[i,j,k+2])/(12.0*D)
+        #for k in range(2, tupVolShape[2]-2):          # Z - Only done first so I can say when an XY slice has been rendered.
+        #    for j in range(2, tupVolShape[1]-2):      # Y
+        #        for i in range(2, tupVolShape[0]-2):  # X
+        #            npmVecSpace[i,j,k,0]=-(phi[i-2,j,k]-8.0*phi[i-1,j,k]+8.0*phi[i+1,j,k]-phi[i+2,j,k])/(12.0*D)
+        #            npmVecSpace[i,j,k,1]=-(phi[i,j-2,k]-8.0*phi[i,j-1,k]+8.0*phi[i,j+1,k]-phi[i,j+2,k])/(12.0*D)
+        #            npmVecSpace[i,j,k,2]=-(phi[i,j,k-2]-8.0*phi[i,j,k-1]+8.0*phi[i,j,k+1]-phi[i,j,k+2])/(12.0*D)
+
+        npmVecSpace[2:-2,2:-2,2:-2,0] = -(phi[:-4,2:-2,2:-2] - 8.*phi[1:-3,2:-2,2:-2] + 8.*phi[3:-1,2:-2,2:-2] 
+                                          - phi[4:,2:-2,2:-2])/12./D
+        npmVecSpace[2:-2,2:-2,2:-2,1] = -(phi[2:-2,2:-2,:-4] - 8.*phi[2:-2,1:-3,2:-2] + 8.*phi[2:-2,3:-1,2:-2] 
+                                          - phi[2:-2,2:-2,4:])/12./D
+        npmVecSpace[2:-2,2:-2,2:-2,2] = -(phi[2:-2,2:-2,:-4] - 8.*phi[2:-2,2:-2,1:-3] + 8.*phi[2:-2,2:-2,3:-1]
+                                          - phi[2:-2,2:-2,4:])/12./D
 
         return npmVecSpace
 
