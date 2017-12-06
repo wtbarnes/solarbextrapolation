@@ -8,7 +8,7 @@ Created on Thu Aug 20 12:59:44 2015
 import numpy as np
 
 
-def Gn_5_2_29(x, y, z, xP, yP, DxDy_val, z_submerge):
+def Gn_5_2_29(x, y, z, xP, yP, z_submerge):
     """
     Discrete Greens Function
     Extends _Gn_5_2_26 by taking the starting position of each magnetic
@@ -69,7 +69,7 @@ def phi_extrapolation_python(boundary, shape, Dx, Dy, Dz):
                 # Variable holding running total for the contributions to point.
                 point_phi_sum = 0.0
 
-                G_n = Gn_5_2_29(x, y, z, xP, yP, DxDy, z_submerge)
+                G_n = Gn_5_2_29(x, y, z, xP, yP, z_submerge)
 
                 # Now add this to the 3D grid.
                 D[j, i, k] = np.sum(boundary * G_n * DxDy)
